@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/user", userRouter);
-app.use("/api/guest", guestRouter);
+// app.use("/api/guest", guestRouter);
 
 const PORT = 3000;
 

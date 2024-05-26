@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import prisma from "./../db/prismaClient";
 
-export const getAllUser = async (res: Response): Promise<void> => {
+export const getAllUser = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const user = await prisma.user.findMany({
 			include: {
@@ -9,7 +12,7 @@ export const getAllUser = async (res: Response): Promise<void> => {
 			},
 		});
 
-		await res.status(200).json(user);
+		await res.json(user);
 	} catch (error) {
 		console.log(error);
 		res.json({
