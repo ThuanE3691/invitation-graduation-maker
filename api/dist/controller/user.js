@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUser = exports.getAllUser = void 0;
 const prismaClient_1 = __importDefault(require("./../db/prismaClient"));
-const getAllUser = (res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield prismaClient_1.default.user.findMany({
             include: {
                 guests: true,
             },
         });
-        yield res.status(200).json(user);
+        yield res.json(user);
     }
     catch (error) {
         console.log(error);
