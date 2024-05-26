@@ -7,10 +7,6 @@ const UserSchema = new Schema({
 		required: true,
 		unique: true,
 	},
-	userDependency: {
-		type: [],
-		ref: "usersDependency",
-	},
 });
 
 module.exports = User = mongoose.model("users", UserSchema);
