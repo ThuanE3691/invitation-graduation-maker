@@ -7,7 +7,7 @@ type CardViewProps = {
 	image?: React.ImgHTMLAttributes<HTMLImageElement>;
 };
 
-const CardView = ({ width, height, rotateX, image }: CardViewProps) => {
+const CardView = ({ width, height, rotateX }: CardViewProps) => {
 	return (
 		<div
 			className="relative px-2 pt-2 pb-12 bg-white w-fit h-fit"

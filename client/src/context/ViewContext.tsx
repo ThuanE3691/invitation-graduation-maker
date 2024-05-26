@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-export const ViewContext = createContext();
+export const ViewContext = createContext({});
 
 const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [viewConfig, setViewConfig] = useState({});
