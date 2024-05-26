@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGuestOfUser, getGuestById } from "./../controller";
+import { createGuestOfUser, getGuestById } from "../controller";
 
 const guestRouter = Router();
 
