@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import axios from "../lib/axiosInstance";
 
 export const ViewContext = createContext({});
 
@@ -6,13 +7,11 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [viewConfig, setViewConfig] = useState({});
 
 	const fetchUser = () => {
-		fetch("/api/user")
-			.then((res) => res.json())
-			.then((data) => {
-				console.log(data);
-				// setViewConfig(data);
-			})
-			.catch((err) => console.log(err));
+		axios.get("/user").then((res) => {
+			console.log(res)
+		}).catch((err) => {
+			console.log(err)
+		})
 	};
 
 	useEffect(() => {

@@ -6,7 +6,7 @@ import ViewController from "./components/ViewController";
 function App() {
 	return (
 		<ViewContextProvider>
-			<div className="relative w-screen h-screen overflow-hidden">
+			<div className="relative w-screen h-screen mobile:min-h-[100dvh]">
 				<ViewController></ViewController>
 				<BaseView />
 			</div>
