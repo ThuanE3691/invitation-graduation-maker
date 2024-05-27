@@ -1,7 +1,7 @@
 import BaseView from "./components/BaseView";
 import "./App.css";
 import ViewContextProvider from "./context/ViewContext";
-import ViewController from "./components/ViewController";
+// import ViewController from "./components/ViewController";
 
 function App() {
 	return (
