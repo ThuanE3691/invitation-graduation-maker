@@ -1,4 +1,3 @@
-import PinSVG from "../SVG/PinSVG";
 import React from "react";
 
 type CardViewProps = {
