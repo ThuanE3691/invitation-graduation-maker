@@ -7,7 +7,7 @@ function App() {
 	return (
 		<ViewContextProvider>
 			<div className="relative w-screen h-screen mobile:min-h-[100dvh]">
-				<ViewController></ViewController>
+				{/* <ViewController></ViewController> */}
 				<BaseView />
 			</div>
 		</ViewContextProvider>
