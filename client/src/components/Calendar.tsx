@@ -15,7 +15,7 @@ const Calendar = () => {
 				<div className="relative font-header">Fri</div>
 				<div className="relative font-header">Sat</div>
 				<div className="col-start-6"></div>
-				{Array.from({ length: 30 }, (v, i) => i).map((_, i) => (
+				{Array.from({ length: 30 }, (_, i) => i).map((_, i) => (
 					<span
 						key={i}
 						className={clsx(
