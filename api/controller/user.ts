@@ -8,6 +8,33 @@ export const getAllUser = async (
 	try {
 		const user = await prisma.user.findMany({
 			include: {
+				guests: {
+					select: {
+						name: true,
+						id: true,
+					},
+				},
+			},
+		});
+
+		await res.json(user);
+	} catch (error) {
+		console.log(error);
+		res.json({
+			success: false,
+			message: "Internal Server",
+			error: error,
+		});
+	}
+};
+
+export const getUserByName = async (req: Request, res: Response) => {
+	try {
+		const user = await prisma.user.findFirst({
+			where: {
+				name: req.params.name,
+			},
+			include: {
 				guests: true,
 			},
 		});
@@ -25,16 +52,21 @@ export const getAllUser = async (
 
 export const createUser = async (req: Request, res: Response) => {
 	try {
-		const { name, email } = req.params;
+		const { name } = req.query;
 		await prisma.user.create({
 			data: {
 				name,
-				email,
 			},
 		});
 
 		return res.status(200).json({
 			success: true,
 		});
-	} catch (error) {}
+	} catch (error) {
+		res.json({
+			success: false,
+			message: "Internal Server",
+			error: error,
+		});
+	}
 };

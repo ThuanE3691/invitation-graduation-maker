@@ -1,14 +1,16 @@
 import PinSVG from "@/SVG/PinSVG";
 import CardView from "./CardView";
-import hat from "@/assets/hat.png";
-import glue from "@/assets/glue.png";
-import map from "@/assets/map.png";
+import { hat, glue, map } from "@/assets";
 import TextCurved from "./TextCurve";
 import Calendar from "./Calendar";
 import { LocationSVG } from "@/SVG/LocationSVG";
 import Timer from "./Timer";
+import { useContext } from "react";
+import { ViewContext, ViewContextType } from "@/context/ViewContext";
 
 const BaseView = () => {
+	const { nameGuest, imageOne } = useContext<ViewContextType>(ViewContext);
+
 	return (
 		<div className="w-full h-fit bg-primary">
 			<header className="flex flex-col items-center justify-center w-full pt-8 font-semibold mobile:text-3xl font-header">
@@ -20,14 +22,14 @@ const BaseView = () => {
 			<div className="relative flex items-center mt-8 bg-white">
 				<div className="mt-4 mb-8 ml-4 mr-8">
 					<img
-						src="https://scontent.fhan4-5.fna.fbcdn.net/v/t39.30808-6/335652337_1963438520657205_4755322452809463836_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_ohc=ufWH6RCq8k4Q7kNvgFyJ7id&_nc_ht=scontent.fhan4-5.fna&oh=00_AYB4tkLwss-Ltm74OwIhuwAhNz9EzmzpHmbOzzZC_bIxhA&oe=665A3AB0"
+						src={imageOne?.image}
 						className=" object-cover w-[163px] h-[217px]"
 					></img>
 				</div>
 				<div className="flex flex-col text-end">
 					<span className="text-3xl font-alex">Hello my friend,</span>
 					<span className="text-2xl font-bold uppercase font-montserrat">
-						Thu Pink
+						{nameGuest?.value}
 					</span>
 				</div>
 				<img src={hat} className="absolute right-8 -bottom-8"></img>

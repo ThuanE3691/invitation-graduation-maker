@@ -14,10 +14,12 @@ datasource db {
 }
 
 model Guest {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  guestOf   User   @relation(fields: [guestOfId], references: [id])
-  guestOfId String @db.ObjectId
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  guestOf      User    @relation(fields: [guestOfId], references: [id])
+  guestOfId    String  @db.ObjectId
+  ImageOfGuest Image[]
+  pageUrl      String
 }
 
 model User {
@@ -25,4 +27,20 @@ model User {
   name   String
   email  String? @unique
   guests Guest[]
+}
+
+enum ImageOrder {
+  First
+  Second
+  Third
+}
+
+model Image {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  filename String
+  mimetype String
+  path     String
+  Guest    Guest?     @relation(fields: [guestId], references: [id])
+  guestId  String?    @db.ObjectId
+  order    ImageOrder
 }

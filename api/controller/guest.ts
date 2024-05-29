@@ -13,16 +13,34 @@ export const getGuestById = async (request: Request, res: Response) => {
 };
 
 export const createGuestOfUser = async (request: Request, res: Response) => {
-	await prisma.user.update({
-		where: {
-			id: request.params.id,
-		},
-		data: {
-			guests: {
-				create: {
-					name: request.params.name,
+	try {
+		const { inviterId, guestName } = request.query;
+
+		const inviter = await prisma.user.findFirst({
+			where: {
+				id: inviterId,
+			},
+			select: {
+				name: true,
+			},
+		});
+
+		await prisma.user.update({
+			where: {
+				id: inviterId,
+			},
+			data: {
+				guests: {
+					create: {
+						name: guestName,
+						pageUrl: `${inviter.name}/${guestName}`,
+					},
 				},
 			},
-		},
-	});
+		});
+
+		return res.json({ success: true });
+	} catch (error) {
+		return res.json({ error: error });
+	}
 };

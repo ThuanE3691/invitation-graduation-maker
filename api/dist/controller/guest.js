@@ -25,17 +25,33 @@ const getGuestById = (request, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.getGuestById = getGuestById;
 const createGuestOfUser = (request, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield prismaClient_1.default.user.update({
-        where: {
-            id: request.params.id,
-        },
-        data: {
-            guests: {
-                create: {
-                    name: request.params.name,
+    try {
+        const { inviterId, guestName } = request.query;
+        const inviter = yield prismaClient_1.default.user.findFirst({
+            where: {
+                id: inviterId,
+            },
+            select: {
+                name: true,
+            },
+        });
+        yield prismaClient_1.default.user.update({
+            where: {
+                id: inviterId,
+            },
+            data: {
+                guests: {
+                    create: {
+                        name: guestName,
+                        pageUrl: `${inviter.name}/${guestName}`,
+                    },
                 },
             },
-        },
-    });
+        });
+        return res.json({ success: true });
+    }
+    catch (error) {
+        return res.json({ error: error });
+    }
 });
 exports.createGuestOfUser = createGuestOfUser;

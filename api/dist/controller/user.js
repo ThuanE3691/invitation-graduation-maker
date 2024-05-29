@@ -12,11 +12,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.getAllUser = void 0;
+exports.createUser = exports.getUserByName = exports.getAllUser = void 0;
 const prismaClient_1 = __importDefault(require("./../db/prismaClient"));
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield prismaClient_1.default.user.findMany({
+            include: {
+                guests: {
+                    select: {
+                        name: true,
+                        id: true,
+                    },
+                },
+            },
+        });
+        yield res.json(user);
+    }
+    catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            message: "Internal Server",
+            error: error,
+        });
+    }
+});
+exports.getAllUser = getAllUser;
+const getUserByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield prismaClient_1.default.user.findFirst({
+            where: {
+                name: req.params.name,
+            },
             include: {
                 guests: true,
             },
@@ -32,20 +59,25 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.getAllUser = getAllUser;
+exports.getUserByName = getUserByName;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email } = req.params;
+        const { name } = req.query;
         yield prismaClient_1.default.user.create({
             data: {
                 name,
-                email,
             },
         });
         return res.status(200).json({
             success: true,
         });
     }
-    catch (error) { }
+    catch (error) {
+        res.json({
+            success: false,
+            message: "Internal Server",
+            error: error,
+        });
+    }
 });
 exports.createUser = createUser;
