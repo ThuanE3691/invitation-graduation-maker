@@ -11,8 +11,19 @@ import { useContext } from "react";
 import { ViewContext, ViewContextType } from "@/context/ViewContext";
 import ImageUpload from "../feature/ImageUpload";
 
-const ViewController = () => {
-	const { nameGuest, imageOne } = useContext<ViewContextType>(ViewContext);
+export enum ModeController {
+	ADMIN = "ADMIN",
+	INVITER = "INVITER",
+	GUEST = "GUEST",
+}
+
+export type ViewControllerProps = {
+	mode: ModeController;
+};
+
+const ViewController = ({ mode }: ViewControllerProps) => {
+	const { nameGuest, imageOne, inviter } =
+		useContext<ViewContextType>(ViewContext);
 
 	return (
 		<Sheet>
@@ -23,6 +34,13 @@ const ViewController = () => {
 				<SheetHeader>
 					<SheetTitle>Create new invitation page</SheetTitle>
 				</SheetHeader>
+				<Separator className="my-4" />
+				{mode === ModeController.INVITER && (
+					<SheetHeader>
+						<SheetTitle>Current Inviter</SheetTitle>
+						<div>{inviter?.value?.name}</div>
+					</SheetHeader>
+				)}
 				<Separator className="my-4" />
 				<SheetHeader>
 					<SheetTitle>Guest Name</SheetTitle>

@@ -5,14 +5,19 @@ import { ImageType, useImage } from "@/hooks/useImage";
 import { User } from "@/models";
 
 export type ViewContextType = {
-    // viewConfig: JSON;
-    // setViewConfig: (viewConfig: JSON) => void;
-    nameGuest: useInputType<string>;
-    imageOne: ImageType;
-		users: {
-			value: User[],
-			setValue: React.Dispatch<React.SetStateAction<User[]>>;
-		}
+	// viewConfig: JSON;
+	// setViewConfig: (viewConfig: JSON) => void;
+	nameGuest: useInputType<string>;
+	imageOne: ImageType;
+	users: {
+		value: User[];
+		setValue: React.Dispatch<React.SetStateAction<User[]>>;
+	};
+	inviter: {
+		value: User | null;
+		setValue: React.Dispatch<React.SetStateAction<User | null>>;
+		fetchInviter: (inviterName: string | undefined) => void;
+	};
 };
 
 export const ViewContext = createContext<ViewContextType>(
@@ -30,8 +35,10 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const [users, setUsers] = useState<User[]>([]);
 
-	const fetchUser = () => {
-		axios
+	const [currentInviter, setCurrentInviter] = useState<User | null>(null);
+
+	const fetchUser = async () => {
+		await axios
 			.get("/user")
 			.then((res) => {
 				setUsers(res.data);
@@ -39,6 +46,22 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const fetchInviter = async (inviterName: string | undefined) => {
+		if (inviterName) {
+			const inviter = users.find((user) => user.name === inviterName);
+			if (inviter) {
+				await axios
+					.get(`/user/${inviter?.name}`)
+					.then((res) => {
+						setCurrentInviter(res.data);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -52,7 +75,12 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		imageOne,
 		users: {
 			value: users,
-			setValue: setUsers
+			setValue: setUsers,
+		},
+		inviter: {
+			value: currentInviter,
+			setValue: setCurrentInviter,
+			fetchInviter,
 		},
 	};
 

@@ -50,6 +50,28 @@ export const getUserByName = async (req: Request, res: Response) => {
 	}
 };
 
+export const getUserById = async (req: Request, res: Response) => {
+	try {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: parseInt(req.params.id),
+			},
+			include: {
+				guests: true,
+			},
+		});
+
+		await res.json(user);
+	} catch (error) {
+		console.log(error);
+		res.json({
+			success: false,
+			message: "Internal Server",
+			error: error,
+		});
+	}
+};
+
 export const createUser = async (req: Request, res: Response) => {
 	try {
 		const { name } = req.query;

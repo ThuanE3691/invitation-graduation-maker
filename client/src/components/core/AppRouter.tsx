@@ -1,40 +1,38 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import { useContext } from "react";
-import ViewController from "./ViewController";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ViewController, { ModeController } from "./ViewController";
 import BaseView from "@/components/view/BaseView";
-import {ViewContext, ViewContextType} from "@/context/ViewContext";
+import InviterView from "../view/InviterView";
 
 const AppRouter = () => {
-
-    const { users } = useContext<ViewContextType>(ViewContext);
-
-    return (
-        <Router>
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <div className="relative w-screen h-screen mobile:min-h-[100dvh]">
-                            <ViewController></ViewController>
-                            <BaseView />
-                        </div>
-                    }
-                />
-                <Route>
-
-                </Route>
-                {
-                    users.value.map((user) => (
-                        <Route
-                            key={user.id}
-                            path={`/user/${user.name}`}
-                            element={<div>{user.name}</div>}
-                        />
-                    ))
-                }
-            </Routes>
-        </Router>
-    );
+	return (
+		<Router>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<div className="relative w-screen h-screen mobile:min-h-[100dvh]">
+							<ViewController mode={ModeController.ADMIN}></ViewController>
+							<BaseView />
+						</div>
+					}
+				/>
+				<Route
+					path={`/user/:inviterName`}
+					element={<InviterView></InviterView>}
+				/>
+				{/* <Route
+					path={`/user/:inviterName/:guestName`}
+					element={
+						<div className="relative w-screen h-screen mobile:min-h-[100dvh]">
+							<ViewController></ViewController>
+							<BaseView />
+						</div>
+					}
+					key={location.pathname}
+				/> */}
+			</Routes>
+		</Router>
+	);
 };
 
 export default AppRouter;
