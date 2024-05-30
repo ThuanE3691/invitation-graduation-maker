@@ -1,13 +1,18 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "../lib/axiosInstance";
 import useInput, { useInputType } from "@/hooks/useInput";
 import { ImageType, useImage } from "@/hooks/useImage";
+import { User } from "@/models";
 
 export type ViewContextType = {
-	// viewConfig: JSON;
-	// setViewConfig: (viewConfig: JSON) => void;
-	nameGuest: useInputType<string>;
-	imageOne: ImageType;
+    // viewConfig: JSON;
+    // setViewConfig: (viewConfig: JSON) => void;
+    nameGuest: useInputType<string>;
+    imageOne: ImageType;
+		users: {
+			value: User[],
+			setValue: React.Dispatch<React.SetStateAction<User[]>>;
+		}
 };
 
 export const ViewContext = createContext<ViewContextType>(
@@ -23,11 +28,13 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const imageOne = useImage({ initialValue: INITIAL_IMAGE });
 
+	const [users, setUsers] = useState<User[]>([]);
+
 	const fetchUser = () => {
 		axios
 			.get("/user")
 			.then((res) => {
-				console.log(res);
+				setUsers(res.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -43,6 +50,10 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		// setViewConfig,
 		nameGuest,
 		imageOne,
+		users: {
+			value: users,
+			setValue: setUsers
+		},
 	};
 
 	return (

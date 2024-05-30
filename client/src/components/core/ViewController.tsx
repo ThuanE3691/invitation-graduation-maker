@@ -9,7 +9,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { Input, Separator } from "@/components/ui";
 import { useContext } from "react";
 import { ViewContext, ViewContextType } from "@/context/ViewContext";
-import ImageUpload from "./feature/ImageUpload";
+import ImageUpload from "../feature/ImageUpload";
 
 const ViewController = () => {
 	const { nameGuest, imageOne } = useContext<ViewContextType>(ViewContext);

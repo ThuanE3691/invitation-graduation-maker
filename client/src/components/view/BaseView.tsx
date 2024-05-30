@@ -1,10 +1,10 @@
 import PinSVG from "@/SVG/PinSVG";
-import CardView from "./CardView";
+import CardView from "../ui/CardView";
 import { hat, glue, map } from "@/assets";
-import TextCurved from "./TextCurve";
-import Calendar from "./Calendar";
+import TextCurved from "../ui/TextCurve";
+import Calendar from "../ui/Calendar";
 import { LocationSVG } from "@/SVG/LocationSVG";
-import Timer from "./Timer";
+import Timer from "../ui/Timer";
 import { useContext } from "react";
 import { ViewContext, ViewContextType } from "@/context/ViewContext";
 
