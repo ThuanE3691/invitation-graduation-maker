@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ViewController, { ModeController } from "./ViewController";
 import BaseView from "@/components/view/BaseView";
 import InviterView from "../view/InviterView";
+import GuestView from "../view/GuestView";
 
 const AppRouter = () => {
 	return (
@@ -20,16 +21,12 @@ const AppRouter = () => {
 					path={`/user/:inviterName`}
 					element={<InviterView></InviterView>}
 				/>
-				{/* <Route
+				<Route
 					path={`/user/:inviterName/:guestName`}
 					element={
-						<div className="relative w-screen h-screen mobile:min-h-[100dvh]">
-							<ViewController></ViewController>
-							<BaseView />
-						</div>
+						<GuestView></GuestView>
 					}
-					key={location.pathname}
-				/> */}
+				/>
 			</Routes>
 		</Router>
 	);

@@ -7,6 +7,7 @@ export type useInputProps<T> = {
 export type useInputType<T> = {
 	value: T;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	setValue: React.Dispatch<React.SetStateAction<T>>;
 };
 
 const useInput = <T,>({ initialValue }: useInputProps<T>) => {
@@ -19,6 +20,7 @@ const useInput = <T,>({ initialValue }: useInputProps<T>) => {
 	return {
 		value,
 		onChange: handleChange,
+		setValue,
 	};
 };
 

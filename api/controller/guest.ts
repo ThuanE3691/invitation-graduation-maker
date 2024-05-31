@@ -2,19 +2,27 @@ import { Request, Response } from "express";
 import prisma from "./../db/prismaClient";
 
 export const getGuestById = async (request: Request, res: Response) => {
-	const guest = await prisma.guest.findFirst({
-		where: { id: request.params.id },
-	});
+	try{
+		const guest = await prisma.guest.findFirst({
+			where: { id: request.params.id },
+		});
 
-	res.json({
-		success: true,
-		data: guest,
-	});
+		res.json({
+			success: true,
+			data: guest,
+		});
+	}catch(error){
+		res.json({
+			success: false,
+			message: "Internal Server",
+			error: error,
+		});
+	}
 };
 
 export const createGuestOfUser = async (request: Request, res: Response) => {
 	try {
-		const { inviterId, guestName } = request.query;
+		const { inviterId, guestName } = request.body;
 
 		const inviter = await prisma.user.findFirst({
 			where: {
