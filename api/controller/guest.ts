@@ -1,17 +1,21 @@
 import { Request, Response } from "express";
 import prisma from "./../db/prismaClient";
+import { ImageOrder, Prisma } from "@prisma/client";
 
 export const getGuestById = async (request: Request, res: Response) => {
-	try{
+	try {
 		const guest = await prisma.guest.findFirst({
 			where: { id: request.params.id },
+			include: {
+				images: true,
+			},
 		});
 
 		res.json({
 			success: true,
 			data: guest,
 		});
-	}catch(error){
+	} catch (error) {
 		res.json({
 			success: false,
 			message: "Internal Server",
@@ -50,5 +54,56 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 		return res.json({ success: true });
 	} catch (error) {
 		return res.json({ error: error });
+	}
+};
+
+export const updateGuest = async (request: Request, res: Response) => {
+	try {
+		const { id, name } = request.body;
+
+		await prisma.guest.update({
+			where: {
+				id: id,
+			},
+			data: {
+				name: name,
+			},
+		});
+
+		return res.json({ success: true });
+	} catch (error) {
+		return res.json({ error: error });
+	}
+};
+
+export const tryToReceiveImage = async (request: Request, res: Response) => {
+	try {
+		const file = request["file"];
+		const { guestId } = request.body;
+
+		await prisma.guest.update({
+			where: {
+				id: guestId,
+			},
+			data: {
+				images: {
+					create: {
+						filename: file.originalname,
+						mimetype: file.mimetype,
+						data: file.buffer,
+						order: ImageOrder.First,
+					},
+				},
+			},
+		});
+
+		return res.json({ success: true, file: file });
+	} catch (e) {
+		if (e instanceof Prisma.PrismaClientKnownRequestError) {
+			// The .code property can be accessed in a type-safe manner
+			console.log(e);
+		}
+		console.log(e);
+		return res.status(404).json({ success: false, error: e });
 	}
 };

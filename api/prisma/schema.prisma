@@ -39,7 +39,7 @@ model Image {
   id       String     @id @default(auto()) @map("_id") @db.ObjectId
   filename String
   mimetype String
-  path     String
+  data     Bytes
   Guest    Guest?     @relation(fields: [guestId], references: [id])
   guestId  String?    @db.ObjectId
   order    ImageOrder
