@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import prisma from "./../db/prismaClient";
-import { ImageOrder, Prisma } from "@prisma/client";
+import fs from "fs";
+import path from "path";
+import { ImageOrder, Image, Prisma } from "@prisma/client";
 
 export const getGuestById = async (request: Request, res: Response) => {
 	try {
@@ -37,65 +39,82 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 			},
 		});
 
-		await prisma.user.update({
-			where: {
-				id: inviterId,
-			},
-			data: {
-				guests: {
-					create: {
-						name: guestName,
-						pageUrl: `${inviter.name}/${guestName}`,
+		const imagePath = path.join(__dirname, "./assets/sample.jpg");
+		fs.readFile(imagePath, async (err, data) => {
+			if (err) {
+				return res.status(500).json({ error: "Failed to create temp file" });
+			}
+
+			// Convert image to base64
+			const base64Image = data.toString("base64");
+			const buffer = Buffer.from(base64Image, "base64");
+
+			const baseImage = {
+				filename: "sample.jpg",
+				mimetype: "image/jpg",
+				data: buffer,
+			} as Image;
+
+			await prisma.user.update({
+				where: {
+					id: inviterId,
+				},
+				data: {
+					guests: {
+						create: {
+							name: guestName,
+							pageUrl: `${inviter.name}/${guestName}`,
+							images: {
+								create: [
+									{
+										...baseImage,
+										order: ImageOrder.First,
+									},
+									{
+										...baseImage,
+										order: ImageOrder.Second,
+									},
+									{
+										...baseImage,
+										order: ImageOrder.Third,
+									},
+								],
+							},
+						},
 					},
 				},
-			},
+			});
 		});
 
 		return res.json({ success: true });
 	} catch (error) {
+		console.log(error);
 		return res.json({ error: error });
 	}
 };
 
 export const updateGuest = async (request: Request, res: Response) => {
 	try {
-		const { id, name } = request.body;
-
-		await prisma.guest.update({
-			where: {
-				id: id,
-			},
-			data: {
-				name: name,
-			},
-		});
-
-		return res.json({ success: true });
-	} catch (error) {
-		return res.json({ error: error });
-	}
-};
-
-export const tryToReceiveImage = async (request: Request, res: Response) => {
-	try {
 		const file = request["file"];
-		const { guestId } = request.body;
+		const { guestId, ...needToUpdate } = request.body;
 
-		await prisma.guest.update({
-			where: {
-				id: guestId,
-			},
-			data: {
-				images: {
-					create: {
-						filename: file.originalname,
-						mimetype: file.mimetype,
-						data: file.buffer,
-						order: ImageOrder.First,
-					},
-				},
-			},
-		});
+		console.log(file, guestId, needToUpdate);
+
+		// await prisma.guest.update({
+		// 	where: {
+		// 		id: guestId,
+		// 	},
+		// 	data: {
+		// 		images: {
+		// 			create: {
+		// 				filename: file.originalname,
+		// 				mimetype: file.mimetype,
+		// 				data: file.buffer,
+		// 				order: ImageOrder.First,
+		// 			},
+		// 		},
+		// 	},
+		// });
 
 		return res.json({ success: true, file: file });
 	} catch (e) {

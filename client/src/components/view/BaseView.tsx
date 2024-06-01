@@ -9,7 +9,7 @@ import { useContext } from "react";
 import { ViewContext, ViewContextType } from "@/context/ViewContext";
 
 const BaseView = () => {
-	const { nameGuest, imageOne } = useContext<ViewContextType>(ViewContext);
+	const { nameGuest, images } = useContext<ViewContextType>(ViewContext);
 
 	return (
 		<div className="w-full h-fit bg-primary">
@@ -21,10 +21,12 @@ const BaseView = () => {
 			</header>
 			<div className="relative flex items-center mt-8 bg-white">
 				<div className="mt-4 mb-8 ml-4 mr-8">
-					<img
-						src={imageOne?.image}
-						className=" object-cover w-[163px] h-[217px]"
-					></img>
+					{
+						<img
+							src={images.length > 0 ? images[0]?.url : ""}
+							className=" object-cover w-[163px] h-[217px]"
+						></img>
+					}
 				</div>
 				<div className="flex flex-col text-end">
 					<span className="text-3xl font-alex">Hello my friend,</span>
@@ -45,6 +47,7 @@ const BaseView = () => {
 							height={122}
 							rotateX={14}
 							footerLength={167 - 122}
+							imageUrl={images[1].url}
 							decoration={
 								<div className="absolute -top-2 -left-6 -rotate-12">
 									<img src={glue}></img>
@@ -58,6 +61,7 @@ const BaseView = () => {
 							height={100}
 							rotateX={-11}
 							footerLength={131 - 100}
+							imageUrl={images[2].url}
 							decoration={
 								<div className="absolute z-20 -top-4 left-16">
 									<PinSVG width={21} height={26}></PinSVG>

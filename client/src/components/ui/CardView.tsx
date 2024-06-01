@@ -6,34 +6,52 @@ type CardViewProps = {
 	rotateX: number;
 	footerLength: number;
 	decoration: React.ReactNode;
-	image?: React.ImgHTMLAttributes<HTMLImageElement>;
+	imageUrl: string;
 };
 
-const CardView = ({width, height, rotateX, footerLength, decoration}: CardViewProps) => {
-    return (
-        <div
-            className="relative px-2 pt-3 bg-white w-fit h-fit shadow-lg"
-            style={{
-                transform: `rotate(${rotateX}deg)`,
-                paddingBottom: footerLength,
-            }}
-        >
-            {decoration}
-            <div
-                className="absolute -top-4 left-20"
-                style={{
-                    transform: `rotate(${rotateX}deg)`,
-                }}
-            ></div>
-            <div
-                className="bg-black"
-                style={{
-                    width: width,
-                    height: height,
-                }}
-            ></div>
-        </div>
-    );
+const CardView = ({
+	width,
+	height,
+	rotateX,
+	footerLength,
+	decoration,
+	imageUrl,
+}: CardViewProps) => {
+	return (
+		<div
+			className="relative px-2 pt-3 bg-white shadow-lg w-fit h-fit"
+			style={{
+				transform: `rotate(${rotateX}deg)`,
+				paddingBottom: footerLength,
+			}}
+		>
+			{decoration}
+			<div
+				className="absolute -top-4 left-20"
+				style={{
+					transform: `rotate(${rotateX}deg)`,
+				}}
+			></div>
+			{imageUrl ? (
+				<img
+					src={imageUrl}
+					style={{
+						width: width,
+						height: height,
+						objectFit: "cover",
+					}}
+				></img>
+			) : (
+				<div
+					style={{
+						width: width,
+						height: height,
+						backgroundColor: "black",
+					}}
+				></div>
+			)}
+		</div>
+	);
 };
 
 export default CardView;

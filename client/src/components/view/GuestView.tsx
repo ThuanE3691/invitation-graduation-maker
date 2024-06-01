@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { ViewContext, ViewContextType } from "../../context/ViewContext";
 import { useQuery } from "@tanstack/react-query";
 import { BufferToBlob } from "@/lib/utils";
+import { Image } from "@/models";
 
 const GuestView = () => {
 	const { inviterName, guestName } = useParams<{
@@ -16,7 +17,7 @@ const GuestView = () => {
 		inviter,
 		users,
 		guest,
-		imageOne,
+		setImages,
 		formMethod: { setGuestName },
 	} = useContext<ViewContextType>(ViewContext);
 
@@ -28,15 +29,19 @@ const GuestView = () => {
 			inviter.setValue(inviterData);
 			guest.setValue(guestData);
 
-			if (guestData?.images[0]?.data?.data) {
-				const imageReceive = guestData?.images[0];
-				const blob = BufferToBlob(
-					imageReceive.data.data,
-					imageReceive.mimetype
-				);
-				const image = URL.createObjectURL(blob);
-				imageOne.setImage(image);
-			}
+			const images: Image[] | undefined = guestData?.images?.map((image) => {
+				const blob = BufferToBlob(image.data.data, image.mimetype);
+				const imageUrl = URL.createObjectURL(blob);
+				return {
+					id: image.id,
+					filename: image.filename,
+					mimetype: image.mimetype,
+					url: imageUrl,
+					order: image.order,
+					data: image.data,
+				} as Image;
+			});
+			setImages(images ?? []);
 			setGuestName(guestData?.name || "");
 			return guestData;
 		},
