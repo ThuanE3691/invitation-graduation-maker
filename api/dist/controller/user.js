@@ -12,24 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.getUserByName = exports.getAllUser = void 0;
+exports.createUser = exports.getUserById = exports.getAllUser = void 0;
 const prismaClient_1 = __importDefault(require("./../db/prismaClient"));
-const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUser = (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield prismaClient_1.default.user.findMany({
-            include: {
-                guests: {
-                    select: {
-                        name: true,
-                        id: true,
-                    },
-                },
-            },
-        });
-        yield res.json(user);
+        const user = yield prismaClient_1.default.user.findMany();
+        return res.json(user);
     }
     catch (error) {
-        console.log(error);
         res.json({
             success: false,
             message: "Internal Server",
@@ -38,20 +28,24 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getAllUser = getAllUser;
-const getUserByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield prismaClient_1.default.user.findFirst({
             where: {
-                name: req.params.name,
+                id: req.params.id,
             },
             include: {
-                guests: true,
+                guests: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         });
-        yield res.json(user);
+        return res.json(user);
     }
     catch (error) {
-        console.log(error);
         res.json({
             success: false,
             message: "Internal Server",
@@ -59,7 +53,7 @@ const getUserByName = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
-exports.getUserByName = getUserByName;
+exports.getUserById = getUserById;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name } = req.query;
