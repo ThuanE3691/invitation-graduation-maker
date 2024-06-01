@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import prisma from "./../db/prismaClient";
 import fs from "fs";
 import path from "path";
+import prisma from "./../db/prismaClient";
+import { Request, Response } from "express";
 import { ImageOrder, Image, Prisma } from "@prisma/client";
 
 export const getGuestById = async (request: Request, res: Response) => {
@@ -39,13 +39,19 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 			},
 		});
 
-		const imagePath = path.join(__dirname, "./assets/sample.jpg");
+		const imagePath = path.join(__dirname, "../assets/sample.jpg");
 		fs.readFile(imagePath, async (err, data) => {
 			if (err) {
+				console.log(err);
 				return res.status(500).json({ error: "Failed to create temp file" });
 			}
 
+			if (!data) {
+				return res.status(500).json({ error: "No data found" });
+			}
+
 			// Convert image to base64
+
 			const base64Image = data.toString("base64");
 			const buffer = Buffer.from(base64Image, "base64");
 
@@ -95,28 +101,24 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 
 export const updateGuest = async (request: Request, res: Response) => {
 	try {
-		const file = request["file"];
-		const { guestId, ...needToUpdate } = request.body;
+		const images = request["files"];
+		const { guestId, imageIds, ...needToUpdate } = request.body;
+		const imagePromises = images.map((image, index) => {
+			return prisma.image.update({
+				where: {
+					id: imageIds[index],
+				},
+				data: {
+					filename: image.originalname,
+					mimetype: image.mimetype,
+					data: image.buffer,
+				},
+			});
+		});
 
-		console.log(file, guestId, needToUpdate);
+		await Promise.all(imagePromises);
 
-		// await prisma.guest.update({
-		// 	where: {
-		// 		id: guestId,
-		// 	},
-		// 	data: {
-		// 		images: {
-		// 			create: {
-		// 				filename: file.originalname,
-		// 				mimetype: file.mimetype,
-		// 				data: file.buffer,
-		// 				order: ImageOrder.First,
-		// 			},
-		// 		},
-		// 	},
-		// });
-
-		return res.json({ success: true, file: file });
+		return res.json({ success: true, file: images });
 	} catch (e) {
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			// The .code property can be accessed in a type-safe manner
