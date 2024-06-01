@@ -14,12 +14,12 @@ datasource db {
 }
 
 model Guest {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  guestOf      User    @relation(fields: [guestOfId], references: [id])
-  guestOfId    String  @db.ObjectId
-  ImageOfGuest Image[]
-  pageUrl      String
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  guestOf   User    @relation(fields: [guestOfId], references: [id])
+  guestOfId String  @db.ObjectId
+  images    Image[]
+  pageUrl   String
 }
 
 model User {

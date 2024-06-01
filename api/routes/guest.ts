@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { createGuestOfUser, getGuestById, updateGuest } from "../controller";
+import {
+	createGuestOfUser,
+	getGuestById,
+	updateGuest,
+	updateImage,
+} from "../controller";
 import multer from "multer";
 
 const storage = multer.memoryStorage(); // Store files in memory for easy access
@@ -9,8 +14,8 @@ const guestRouter = Router();
 
 guestRouter.get("/:id", getGuestById);
 guestRouter.post("/", createGuestOfUser);
-// guestRouter.put("/:id", updateGuest);
+guestRouter.put("/update", updateGuest);
 
-guestRouter.put("/", upload.array("images", 3), updateGuest);
+guestRouter.put("/image", upload.single("file"), updateImage);
 
 export default guestRouter;

@@ -128,7 +128,6 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 					img.mimetype = image.mimetype;
 					img.filename = image.filename;
 					img.url = image.url;
-					img.file = image.file;
 				}
 				return img;
 			});

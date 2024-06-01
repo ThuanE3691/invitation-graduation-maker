@@ -14,5 +14,4 @@ export type Image = {
 	};
 	order: Order;
 	url: string;
-	file?: File;
 };

@@ -49,7 +49,7 @@ const GuestView = () => {
 	});
 
 	if (isPending) {
-		return <div>Loading...</div>;
+		return <div></div>;
 	}
 
 	return (

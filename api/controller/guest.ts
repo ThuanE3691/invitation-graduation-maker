@@ -3,6 +3,7 @@ import path from "path";
 import prisma from "./../db/prismaClient";
 import { Request, Response } from "express";
 import { ImageOrder, Image, Prisma } from "@prisma/client";
+import { error } from "console";
 
 export const getGuestById = async (request: Request, res: Response) => {
 	try {
@@ -18,6 +19,7 @@ export const getGuestById = async (request: Request, res: Response) => {
 			data: guest,
 		});
 	} catch (error) {
+		console.log(error);
 		res.json({
 			success: false,
 			message: "Internal Server",
@@ -99,31 +101,42 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 	}
 };
 
+export const updateImage = async (req: Request, res: Response) => {
+	try {
+		const { imageId } = req.body;
+		const image = req["file"];
+		await prisma.image.update({
+			where: {
+				id: imageId,
+			},
+			data: {
+				data: image.buffer,
+				mimetype: image.mimetype,
+				filename: image.filename,
+			},
+		});
+		return res.json({ success: true });
+	} catch {
+		console.log(error);
+		return res.status(404).json({ success: false });
+	}
+};
+
 export const updateGuest = async (request: Request, res: Response) => {
 	try {
-		const images = request["files"];
-		const { guestId, imageIds, ...needToUpdate } = request.body;
-		const imagePromises = images.map((image, index) => {
-			return prisma.image.update({
-				where: {
-					id: imageIds[index],
-				},
-				data: {
-					filename: image.originalname,
-					mimetype: image.mimetype,
-					data: image.buffer,
-				},
-			});
+		const { nameGuest, guestId } = request.body;
+
+		await prisma.guest.update({
+			where: {
+				id: guestId,
+			},
+			data: {
+				name: nameGuest,
+			},
 		});
 
-		await Promise.all(imagePromises);
-
-		return res.json({ success: true, file: images });
+		return res.json({ success: true });
 	} catch (e) {
-		if (e instanceof Prisma.PrismaClientKnownRequestError) {
-			// The .code property can be accessed in a type-safe manner
-			console.log(e);
-		}
 		console.log(e);
 		return res.status(404).json({ success: false, error: e });
 	}

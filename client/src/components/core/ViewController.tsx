@@ -29,23 +29,14 @@ export type ViewControllerProps = {
 };
 
 const ViewController = ({ mode }: ViewControllerProps) => {
-	const { nameGuest, guest, inviter, images } =
+	const { nameGuest, guest, inviter } =
 		useContext<ViewContextType>(ViewContext);
 
 	const mutation = useMutation({
 		mutationFn: async () => {
-			const formData = new FormData();
-			images.forEach((image) => {
-				formData.append("images", image?.file ?? new Blob());
-				formData.append("imageOrders", image?.order ?? "");
-				formData.append("imageIds", image?.id?.toString());
-			});
-			formData.append("guestName", nameGuest?.value ?? "");
-			formData.append("guestId", guest?.value?.id?.toString() ?? "");
-			return await axios.put("/guest/", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
+			return await axios.put("/guest/update", {
+				guestId: guest.value?.id,
+				nameGuest: nameGuest.value,
 			});
 		},
 	});
@@ -71,7 +62,7 @@ const ViewController = ({ mode }: ViewControllerProps) => {
 								<span className="font-medium">List Guest</span>
 								<GuestSelect></GuestSelect>
 							</SheetHeader>
-							<div className="flex gap-x-2 items-center">
+							<div className="flex items-center gap-x-2">
 								<Separator className=" w-[45%]" />
 								<div className="font-medium font-montserrat">OR</div>
 								<Separator className=" w-[45%]" />

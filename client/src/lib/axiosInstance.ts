@@ -1,10 +1,12 @@
 import axios from "axios";
 
 const localUrl = "http://localhost:3000/api";
-// const baseURL = "https://invitation-graduation-maker-api.vercel.app/api";
+const productionURL = "https://invitation-graduation-maker-api.vercel.app/api";
+
+let url = process.env.NODE_ENV === "production" ? productionURL : localUrl;
 
 const instance = axios.create({
-  baseURL: localUrl,
+	baseURL: url,
 });
 
 export default instance;
