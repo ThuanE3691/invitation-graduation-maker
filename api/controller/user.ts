@@ -33,7 +33,6 @@ export const getUserById = async (req: Request, res: Response) => {
 
 		return res.json(user);
 	} catch (error) {
-		console.log(error);
 		res.json({
 			success: false,
 			message: "Internal Server",
