@@ -31,7 +31,7 @@ export const getUserById = async (req: Request, res: Response) => {
 			},
 		});
 
-		await res.json(user);
+		return res.json(user);
 	} catch (error) {
 		console.log(error);
 		res.json({
