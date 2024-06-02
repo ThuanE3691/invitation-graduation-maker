@@ -10,19 +10,19 @@ const InviterView = () => {
 	const { inviterName } = useParams<{ inviterName: string }>();
 	const {
 		inviter,
-		users,
+		users: { fetchUser },
 		formMethod: { setGuestName },
 	} = useContext<ViewContextType>(ViewContext);
 
 	const { isPending } = useQuery({
 		queryKey: ["user", inviterName],
 		queryFn: async () => {
-			const data = await inviter.fetchInviter(inviterName);
+			const users = await fetchUser();
+			const data = await inviter.fetchInviter(users, inviterName);
 			inviter.setValue(data);
 			setGuestName("GUEST NAME");
 			return data;
 		},
-		enabled: users.value.length > 0,
 	});
 
 	if (isPending) {

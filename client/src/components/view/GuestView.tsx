@@ -15,7 +15,7 @@ const GuestView = () => {
 	}>();
 	const {
 		inviter,
-		users,
+		users: { fetchUser },
 		guest,
 		setImages,
 		formMethod: { setGuestName },
@@ -25,9 +25,10 @@ const GuestView = () => {
 	const [searchParams, _] = useSearchParams();
 
 	const { isPending } = useQuery({
-		queryKey: ["user", inviterName, guestName],
+		queryKey: ["users", inviterName, guestName],
 		queryFn: async () => {
-			const inviterData = await inviter.fetchInviter(inviterName);
+			const users = await fetchUser();
+			const inviterData = await inviter.fetchInviter(users, inviterName);
 			const guestData = await guest.fetchGuest(inviterData ?? null, guestName);
 			inviter.setValue(inviterData);
 			guest.setValue(guestData);
@@ -53,7 +54,7 @@ const GuestView = () => {
 			setGuestName(guestData?.name || "");
 			return guestData;
 		},
-		enabled: users.value.length > 0,
+		retry: 3,
 	});
 
 	if (isPending) {

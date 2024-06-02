@@ -11,11 +11,15 @@ export type ViewContextType = {
 	users: {
 		value: User[];
 		setValue: React.Dispatch<React.SetStateAction<User[]>>;
+		fetchUser: () => Promise<User[]>;
 	};
 	inviter: {
 		value: User | null;
 		setValue: React.Dispatch<React.SetStateAction<User | null>>;
-		fetchInviter: (inviterName: string | undefined) => Promise<User | null>;
+		fetchInviter: (
+			users: User[],
+			inviterName: string | undefined
+		) => Promise<User | null>;
 	};
 	guest: {
 		value: Guest | null;
@@ -68,6 +72,7 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 			setUsers(data);
 			return data;
 		},
+		retry: 3,
 	});
 
 	const fetchUser = async (): Promise<User[]> => {
@@ -82,6 +87,7 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const fetchInviter = async (
+		users: User[],
 		inviterName: string | undefined
 	): Promise<User | null> => {
 		if (inviterName) {
@@ -155,6 +161,7 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		users: {
 			value: users,
 			setValue: setUsers,
+			fetchUser,
 		},
 		inviter: {
 			value: currentInviter,
@@ -169,6 +176,7 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		formMethod: {
 			setGuestName,
 		},
+
 		images,
 		setImages,
 		updateImage,
