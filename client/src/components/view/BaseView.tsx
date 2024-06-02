@@ -5,74 +5,163 @@ import TextCurved from "../ui/TextCurve";
 import Calendar from "../ui/Calendar";
 import { LocationSVG } from "@/SVG/LocationSVG";
 import Timer from "../ui/Timer";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { ViewContext, ViewContextType } from "@/context/ViewContext";
+import LetterPullUp from "../animations/LetterPullUp";
+import { motion, useInView } from "framer-motion";
+import WordPullUp from "../animations/WordPullUp";
+import TypingEffect from "../animations/TypingEffect";
 
 const BaseView = () => {
 	const { nameGuest, images } = useContext<ViewContextType>(ViewContext);
 
+	const ref = useRef(null);
+	const isInView = useInView(ref, { once: true });
+
+	const MULTIDIRECTION_SLIDE_VARIANTS = {
+		hidden: { opacity: 0, x: "-25vw" },
+		visible: { opacity: 1, x: 0 },
+		right: { opacity: 0, x: "25vw" },
+	};
+
+	const FADE_DOWN_ANIMATION_VARIANTS = {
+		hidden: { opacity: 0, y: -10 },
+		show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.3 } },
+	};
+
+	const FADE_UP_ANIMATION_VARIANTS = {
+		hidden: { opacity: 0, y: 10 },
+		show: { opacity: 1, y: 0, transition: { type: "spring" } },
+	};
+
 	return (
-		<div className="w-full h-fit bg-primary">
-			<header className="flex flex-col items-center justify-center w-full pt-8 font-semibold mobile:text-3xl font-header">
+		<div className="w-full overflow-x-hidden h-fit bg-primary">
+			<div className="flex flex-col items-center justify-center w-full h-[100vh] pt-8 font-semibold mobile:text-3xl font-header">
 				<TextCurved></TextCurved>
 
-				<span className="mobile:text-5xl">Graduation</span>
-				<span className="mobile:text-5xl">Ceremony</span>
-			</header>
-			<div className="relative flex items-center mt-8 bg-white">
-				<div className="mt-4 mb-8 ml-4 mr-8">
-					{
-						<img
-							src={images.length > 0 ? images[0]?.url : ""}
-							className=" object-cover w-[163px] h-[217px]"
-						></img>
-					}
+				<div className="flex w-full">
+					<LetterPullUp
+						listWords={["Graduation", "Ceremony"]}
+						className="text-5xl"
+						delay={0.3}
+					></LetterPullUp>
 				</div>
+			</div>
+			<div className="relative flex items-center mt-8 bg-white h-[60vh]">
+				<motion.div
+					className="mt-4 mb-8 ml-4 mr-8"
+					style={{ width: images[0].width, height: images[0].height }}
+					initial="hidden"
+					whileInView="show"
+					viewport={{ once: true }}
+					variants={FADE_DOWN_ANIMATION_VARIANTS}
+				>
+					{
+						<motion.img
+							src={images.length > 0 ? images[0]?.url : ""}
+							className="absolute object-cover "
+							style={{ width: images[0].width, height: images[0].height }}
+							animate={{
+								x: images[0].x,
+								y: images[0].y,
+								rotate: images[0].rotate,
+							}}
+						></motion.img>
+					}
+				</motion.div>
 				<div className="flex flex-col text-end">
-					<span className="text-3xl font-alex">Hello my friend,</span>
-					<span className="text-2xl font-bold uppercase font-montserrat">
+					<motion.span
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+						variants={MULTIDIRECTION_SLIDE_VARIANTS}
+						transition={{ duration: 0.75 }}
+						className="text-3xl font-alex"
+					>
+						Hello my friend,
+					</motion.span>
+					<motion.span
+						initial="right"
+						whileInView="visible"
+						viewport={{ once: true }}
+						variants={MULTIDIRECTION_SLIDE_VARIANTS}
+						transition={{ duration: 0.75 }}
+						className="text-2xl font-bold uppercase font-montserrat"
+					>
 						{nameGuest?.value}
-					</span>
+					</motion.span>
 				</div>
 				<img src={hat} className="absolute right-8 -bottom-8"></img>
 			</div>
-			<div className="relative flex flex-col justify-center py-8">
-				<span className="text-center font-alike">
-					We will create more valuable memories together
-				</span>
-				<div className="relative flex justify-center pt-8 min-h-60">
-					<div className="absolute left-12">
+			<div className="relative flex flex-col justify-center py-8 h-[60vh]">
+				<div ref={ref}>
+					{isInView && (
+						<TypingEffect
+							text="We will create more valuable memories together"
+							className="text-center font-alike"
+							delay={50}
+						></TypingEffect>
+					)}
+				</div>
+				<motion.div
+					className="relative flex justify-center pt-8 min-h-60"
+					initial="hidden"
+					whileInView="show"
+					viewport={{ once: true }}
+					variants={{
+						hidden: {},
+						show: {
+							transition: {
+								staggerChildren: 0.15,
+								delayChildren: 2,
+							},
+						},
+					}}
+				>
+					<motion.div
+						className="absolute left-12"
+						variants={FADE_UP_ANIMATION_VARIANTS}
+					>
 						<CardView
-							width={116}
-							height={122}
-							rotateX={14}
-							footerLength={167 - 122}
+							width={images[1].width}
+							height={images[1].height}
+							rotateX={images[1].rotate}
+							footerLength={31}
 							imageUrl={images[1].url}
+							x={images[1].x}
+							y={images[1].y}
 							decoration={
 								<div className="absolute -top-2 -left-6 -rotate-12">
 									<img src={glue}></img>
 								</div>
 							}
 						></CardView>
-					</div>
-					<div className="absolute translate-y-12 right-16">
+					</motion.div>
+					<motion.div
+						className="absolute translate-y-12 right-16"
+						variants={FADE_UP_ANIMATION_VARIANTS}
+					>
 						<CardView
-							width={131}
-							height={100}
-							rotateX={-11}
-							footerLength={131 - 100}
+							width={images[2].width}
+							height={images[2].height}
+							rotateX={images[2].rotate}
+							footerLength={33}
 							imageUrl={images[2].url}
+							x={images[2].x}
+							y={images[2].y}
 							decoration={
 								<div className="absolute z-20 -top-4 left-16">
 									<PinSVG width={21} height={26}></PinSVG>
 								</div>
 							}
 						></CardView>
-					</div>
-				</div>
-				<div className="text-2xl text-center font-header">
-					Come and take a picture with me
-				</div>
+					</motion.div>
+				</motion.div>
+				<WordPullUp
+					words="Come and take a picture with me"
+					className="text-2xl text-center font-header"
+					delay={2.25}
+				></WordPullUp>
 			</div>
 			<div className="flex flex-col items-center justify-center py-8 bg-white">
 				<div className="flex items-center justify-center text-2xl font-extrabold gap-x-5 font-montserrat">

@@ -13,4 +13,5 @@ guestRouter.get("/:id", controller_1.getGuestById);
 guestRouter.post("/", controller_1.createGuestOfUser);
 guestRouter.put("/update", controller_1.updateGuest);
 guestRouter.put("/image", upload.single("file"), controller_1.updateImage);
+guestRouter.put("/imageInfo", controller_1.updateImageInfo);
 exports.default = guestRouter;

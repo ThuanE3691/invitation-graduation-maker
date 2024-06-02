@@ -43,4 +43,9 @@ model Image {
   Guest    Guest?     @relation(fields: [guestId], references: [id])
   guestId  String?    @db.ObjectId
   order    ImageOrder
+  x        Int
+  y        Int
+  rotate   Int
+  width    Int
+  height   Int
 }

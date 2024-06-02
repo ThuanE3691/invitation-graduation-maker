@@ -31,6 +31,7 @@ export type ViewContextType = {
 	images: Image[];
 	setImages: React.Dispatch<React.SetStateAction<Image[]>>;
 	updateImage: (image: Image) => void;
+	setImageInfo: (image: Image, name: string, value: number) => void;
 };
 
 export const ViewContext = createContext<ViewContextType>(
@@ -135,6 +136,18 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		});
 	};
 
+	const setImageInfo = (image: Image, name: string, value: number) => {
+		setImages((prev) => {
+			const newImages = [...prev].map((img) => {
+				if (img.order === image.order) {
+					img[name] = value;
+				}
+				return img;
+			});
+			return newImages;
+		});
+	};
+
 	const viewContextValue: ViewContextType = {
 		// viewConfig,
 		// setViewConfig,
@@ -159,6 +172,7 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		images,
 		setImages,
 		updateImage,
+		setImageInfo,
 	};
 
 	return (

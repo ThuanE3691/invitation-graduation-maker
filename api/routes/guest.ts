@@ -4,6 +4,7 @@ import {
 	getGuestById,
 	updateGuest,
 	updateImage,
+	updateImageInfo,
 } from "../controller";
 import multer from "multer";
 
@@ -17,5 +18,6 @@ guestRouter.post("/", createGuestOfUser);
 guestRouter.put("/update", updateGuest);
 
 guestRouter.put("/image", upload.single("file"), updateImage);
+guestRouter.put("/imageInfo", updateImageInfo);
 
 export default guestRouter;

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React from "react";
 
 type CardViewProps = {
@@ -7,6 +8,8 @@ type CardViewProps = {
 	footerLength: number;
 	decoration: React.ReactNode;
 	imageUrl: string;
+	x: number;
+	y: number;
 };
 
 const CardView = ({
@@ -16,22 +19,30 @@ const CardView = ({
 	footerLength,
 	decoration,
 	imageUrl,
+	x,
+	y,
 }: CardViewProps) => {
 	return (
-		<div
+		<motion.div
 			className="relative px-2 pt-3 bg-white shadow-lg w-fit h-fit"
 			style={{
-				transform: `rotate(${rotateX}deg)`,
 				paddingBottom: footerLength,
+			}}
+			animate={{
+				x: x,
+				y: y,
+				rotate: rotateX,
 			}}
 		>
 			{decoration}
-			<div
+			<motion.div
 				className="absolute -top-4 left-20"
-				style={{
-					transform: `rotate(${rotateX}deg)`,
+				animate={{
+					x: x,
+					y: y,
+					rotate: rotateX,
 				}}
-			></div>
+			></motion.div>
 			{imageUrl ? (
 				<img
 					src={imageUrl}
@@ -50,7 +61,7 @@ const CardView = ({
 					}}
 				></div>
 			)}
-		</div>
+		</motion.div>
 	);
 };
 

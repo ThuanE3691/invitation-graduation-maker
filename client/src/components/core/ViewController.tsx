@@ -14,7 +14,6 @@ import InviterSelect from "../feature/InviterSelect";
 import GuestSelect from "../feature/GuestSelect";
 import { Button } from "../ui/button";
 import NewDialog from "../feature/NewDialog";
-import { Order } from "@/models";
 import { useMutation } from "@tanstack/react-query";
 import axios from "@/lib/axiosInstance";
 
@@ -29,7 +28,7 @@ export type ViewControllerProps = {
 };
 
 const ViewController = ({ mode }: ViewControllerProps) => {
-	const { nameGuest, guest, inviter } =
+	const { nameGuest, guest, inviter, images } =
 		useContext<ViewContextType>(ViewContext);
 
 	const mutation = useMutation({
@@ -43,7 +42,7 @@ const ViewController = ({ mode }: ViewControllerProps) => {
 
 	return (
 		<Sheet>
-			<SheetTrigger className="absolute py-4 pl-4">
+			<SheetTrigger className="fixed z-50 py-4 pl-4">
 				<IoSettingsOutline size={32} />
 			</SheetTrigger>
 			<SheetContent>
@@ -74,24 +73,28 @@ const ViewController = ({ mode }: ViewControllerProps) => {
 						<>
 							<SheetHeader>
 								<span className="font-medium">Guest Name</span>
-								<Input
-									value={nameGuest?.value}
-									onChange={nameGuest?.onChange}
-								></Input>
+								<div className="flex items-center gap-x-2">
+									<Input
+										value={nameGuest?.value}
+										onChange={nameGuest?.onChange}
+									></Input>
+									<Button variant="outline" onClick={() => mutation.mutate()}>
+										Save
+									</Button>
+								</div>
 							</SheetHeader>
 							<SheetHeader>
 								<span className="font-medium">First Image</span>
-								<ImageUpload order={Order.FIRST}></ImageUpload>
+								<ImageUpload image={images[0]}></ImageUpload>
 							</SheetHeader>
 							<SheetHeader>
 								<span className="font-medium">Second Image</span>
-								<ImageUpload order={Order.SECOND}></ImageUpload>
+								<ImageUpload image={images[1]}></ImageUpload>
 							</SheetHeader>
 							<SheetHeader>
 								<span className="font-medium">Third Image</span>
-								<ImageUpload order={Order.THIRD}></ImageUpload>
+								<ImageUpload image={images[2]}></ImageUpload>
 							</SheetHeader>
-							<Button onClick={() => mutation.mutate()}>Save</Button>
 						</>
 					)}
 				</div>

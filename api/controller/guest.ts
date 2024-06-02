@@ -61,6 +61,8 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 				filename: "sample.jpg",
 				mimetype: "image/jpg",
 				data: buffer,
+				x: 0,
+				y: 0,
 			} as Image;
 
 			await prisma.user.update({
@@ -77,14 +79,23 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 									{
 										...baseImage,
 										order: ImageOrder.First,
+										width: 163,
+										height: 217,
+										rotate: 0,
 									},
 									{
 										...baseImage,
 										order: ImageOrder.Second,
+										width: 116,
+										height: 122,
+										rotate: 14,
 									},
 									{
 										...baseImage,
 										order: ImageOrder.Third,
+										width: 131,
+										height: 100,
+										rotate: -11,
 									},
 								],
 							},
@@ -97,7 +108,7 @@ export const createGuestOfUser = async (request: Request, res: Response) => {
 		return res.json({ success: true });
 	} catch (error) {
 		console.log(error);
-		return res.json({ error: error });
+		return res.status(404).json({ error: error });
 	}
 };
 
@@ -139,5 +150,23 @@ export const updateGuest = async (request: Request, res: Response) => {
 	} catch (e) {
 		console.log(e);
 		return res.status(404).json({ success: false, error: e });
+	}
+};
+
+export const updateImageInfo = async (req: Request, res: Response) => {
+	try {
+		const { imageId, ...updated } = req.body;
+		await prisma.image.update({
+			where: {
+				id: imageId,
+			},
+			data: {
+				...updated,
+			},
+		});
+		return res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		return res.status(404).json({ success: false });
 	}
 };

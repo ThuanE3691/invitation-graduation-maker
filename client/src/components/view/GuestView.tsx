@@ -1,6 +1,6 @@
 import BaseView from "./BaseView";
 import ViewController from "../core/ViewController";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { ModeController } from "../core/ViewController";
 import { useContext } from "react";
 import { ViewContext, ViewContextType } from "../../context/ViewContext";
@@ -21,6 +21,9 @@ const GuestView = () => {
 		formMethod: { setGuestName },
 	} = useContext<ViewContextType>(ViewContext);
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [searchParams, _] = useSearchParams();
+
 	const { isPending } = useQuery({
 		queryKey: ["user", inviterName, guestName],
 		queryFn: async () => {
@@ -39,6 +42,11 @@ const GuestView = () => {
 					url: imageUrl,
 					order: image.order,
 					data: image.data,
+					x: image.x,
+					y: image.y,
+					width: image.width,
+					height: image.height,
+					rotate: image.rotate,
 				} as Image;
 			});
 			setImages(images ?? []);
@@ -54,7 +62,9 @@ const GuestView = () => {
 
 	return (
 		<div>
-			<ViewController mode={ModeController.GUEST}></ViewController>
+			{searchParams.get("displayMode") === "edit" && (
+				<ViewController mode={ModeController.GUEST}></ViewController>
+			)}
 			<BaseView />
 		</div>
 	);
