@@ -27,7 +27,7 @@ const BaseView = () => {
 
 	const FADE_DOWN_ANIMATION_VARIANTS = {
 		hidden: { opacity: 0, y: -10 },
-		show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.3 } },
+		show: { opacity: 1, y: 0, transition: { type: "spring", duration: 0.5 } },
 	};
 
 	const FADE_UP_ANIMATION_VARIANTS = {
@@ -181,7 +181,7 @@ const BaseView = () => {
 					<LocationSVG></LocationSVG>
 					<span className="text-2xl">Location</span>
 				</div>
-				<div className="mt-2 text-sm font-medium text-center font-montserrat">
+				<div className="mt-2 text-xs font-medium text-center font-montserrat">
 					<span>University of Information Technology - VNU</span>
 					<br></br>
 					<span>Han Thuyen street, Linh Trung Ward, Thu Duc City, HCMC</span>

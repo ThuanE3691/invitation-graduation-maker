@@ -38,7 +38,6 @@ const GuestView = () => {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [searchParams, _] = useSearchParams();
-	// const [isLoading, setIsLoading] = useState(true);
 
 	const { data: guestData } = useQuery({
 		queryKey: ["user", inviterName, guestName],
@@ -54,7 +53,7 @@ const GuestView = () => {
 		refetchOnWindowFocus: false,
 	});
 
-	const { data: listImages, isLoading } = useFetchImages(
+	const { data: listImages, isPending } = useFetchImages(
 		guestData?.images?.map((image) => image.id) ?? []
 	);
 
@@ -81,7 +80,7 @@ const GuestView = () => {
 		}
 	}, [listImages, setImages]);
 
-	if (isLoading) {
+	if (isPending || listImages?.length === 0) {
 		return <div></div>;
 	}
 
