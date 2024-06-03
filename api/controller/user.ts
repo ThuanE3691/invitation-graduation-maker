@@ -43,10 +43,11 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
 	try {
-		const { name } = req.query;
+		const { name, email } = req.body;
 		await prisma.user.create({
 			data: {
 				name,
+				email
 			},
 		});
 
@@ -54,6 +55,8 @@ export const createUser = async (req: Request, res: Response) => {
 			success: true,
 		});
 	} catch (error) {
+
+		console.log(error)
 		res.json({
 			success: false,
 			message: "Internal Server",
