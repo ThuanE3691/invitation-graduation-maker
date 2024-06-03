@@ -2,7 +2,6 @@ import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
-	SheetOverlay,
 	SheetPortal,
 	SheetTitle,
 	SheetTrigger,
