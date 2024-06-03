@@ -15,7 +15,7 @@ import useInput from "@/hooks/useInput";
 import { useMutation } from "@tanstack/react-query";
 import axios from "@/lib/axiosInstance";
 import { User } from "@/models";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 type NewDialogProps = {
 	inviter: User | null;
@@ -23,7 +23,7 @@ type NewDialogProps = {
 
 const NewDialog = ({ inviter }: NewDialogProps) => {
 	const name = useInput<string>({ initialValue: "Pedro Duarte" });
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	const handleCreateNewGuest = useMutation({
 		mutationFn: () => {
