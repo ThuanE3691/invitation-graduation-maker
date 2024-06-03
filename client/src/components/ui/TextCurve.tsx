@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const TextCurved = () => {
+const TextCurved = ({ startAnimation }: { startAnimation: boolean }) => {
 	const FADE_DOWN_ANIMATION_VARIANTS = {
 		hidden: { opacity: 0, y: -10 },
 		show: { opacity: 1, y: 0, transition: { type: "spring" } },
@@ -14,7 +14,7 @@ const TextCurved = () => {
 			xmlns="http://www.w3.org/2000/svg"
 			variants={FADE_DOWN_ANIMATION_VARIANTS}
 			initial="hidden"
-			animate="show"
+			animate={startAnimation ? "show" : "hidden"}
 			transition={{
 				duration: 0.3,
 			}}

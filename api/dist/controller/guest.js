@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateImageInfo = exports.updateGuest = exports.updateImage = exports.createGuestOfUser = exports.getGuestById = void 0;
+exports.updateImageInfo = exports.updateGuest = exports.updateImage = exports.createGuestOfUser = exports.getImageById = exports.getGuestById = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const prismaClient_1 = __importDefault(require("./../db/prismaClient"));
@@ -34,7 +34,11 @@ const getGuestById = (request, res) => __awaiter(void 0, void 0, void 0, functio
         const guest = yield prismaClient_1.default.guest.findFirst({
             where: { id: request.params.id },
             include: {
-                images: true,
+                images: {
+                    select: {
+                        id: true,
+                    },
+                },
             },
         });
         res.json({
@@ -52,6 +56,26 @@ const getGuestById = (request, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getGuestById = getGuestById;
+const getImageById = (request, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const image = yield prismaClient_1.default.image.findFirst({
+            where: { id: request.params.id },
+        });
+        res.json({
+            success: true,
+            data: image,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            message: "Internal Server",
+            error: error,
+        });
+    }
+});
+exports.getImageById = getImageById;
 const createGuestOfUser = (request, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { inviterId, guestName } = request.body;

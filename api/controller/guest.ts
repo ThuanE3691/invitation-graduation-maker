@@ -10,13 +10,37 @@ export const getGuestById = async (request: Request, res: Response) => {
 		const guest = await prisma.guest.findFirst({
 			where: { id: request.params.id },
 			include: {
-				images: true,
+				images: {
+					select: {
+						id: true,
+					},
+				},
 			},
 		});
 
 		res.json({
 			success: true,
 			data: guest,
+		});
+	} catch (error) {
+		console.log(error);
+		res.json({
+			success: false,
+			message: "Internal Server",
+			error: error,
+		});
+	}
+};
+
+export const getImageById = async (request: Request, res: Response) => {
+	try {
+		const image = await prisma.image.findFirst({
+			where: { id: request.params.id },
+		});
+
+		res.json({
+			success: true,
+			data: image,
 		});
 	} catch (error) {
 		console.log(error);

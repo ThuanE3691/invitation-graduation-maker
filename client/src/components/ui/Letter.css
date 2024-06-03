@@ -1,0 +1,130 @@
+:root {
+	--inside-color: #8d856e;
+	--top-color: #ecd7bd;
+	--left-color: #ffffff;
+	--right-color: #ffffff;
+}
+
+.wap {
+	height: 200px;
+	width: 300px;
+	background-color: var(--inside-color);
+	position: relative;
+	display: flex;
+	justify-content: center;
+	z-index: 0;
+	animation: bounce 0.8s infinite;
+}
+
+@keyframes bounce {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+.lid {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	border-right: 150px solid transparent;
+	border-bottom: 100px solid transparent;
+	border-left: 150px solid transparent;
+	transform-origin: top;
+	transition: transform 0.25s linear;
+}
+
+/* Lid when closed */
+.lid.one {
+	border-top: 100px solid var(--top-color);
+	transform: rotateX(0deg);
+	z-index: 3;
+	transition-delay: 0.75s;
+}
+
+/* Lid when opened */
+.lid.two {
+	border-top: 100px solid var(--inside-color);
+	transform: rotateX(90deg);
+	z-index: 1;
+	transition-delay: 0.5s;
+}
+
+.envelope {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	border-top: 100px solid transparent;
+	border-right: 150px solid var(--right-color);
+	border-bottom: 100px solid var(--right-color);
+	border-left: 150px solid var(--left-color);
+	z-index: 3;
+	box-shadow: 5px 5px 5px #aaa;
+}
+
+.letter {
+	position: absolute;
+	top: 0;
+	width: 80%;
+	height: 80%;
+	background-color: rgb(255, 246, 236);
+	border-radius: 15px;
+	z-index: 2;
+	transition: transform 1s, opacity 0.3s;
+	opacity: 0;
+}
+.letter img {
+	width: 100%;
+}
+.letter p {
+	text-align: center;
+	font-size: 30px;
+	margin-top: 30px;
+	color: #3b4049;
+}
+
+.wap.opened .letter {
+	display: block;
+	opacity: 1;
+	transform: translateY(-100px);
+	transition-delay: 0.3s;
+	transition-duration: 1.5s;
+}
+
+.wap:hover .lid.one {
+	transform: rotateX(90deg);
+	transition-delay: 0s;
+}
+
+.wap:hover .lid.two {
+	transform: rotateX(180deg);
+	transition-delay: 0.25s;
+}
+
+.wap.opened .lid.one {
+	transform: rotateX(90deg);
+	transition-delay: 0s;
+}
+
+.wap.opened .lid.two {
+	transform: rotateX(180deg);
+	transition-delay: 0.25s;
+}
+
+.main-letter {
+	display: none;
+	width: 100vw;
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
+	font-size: 30px;
+	color: #fff;
+	background-color: #3d69bb;
+}

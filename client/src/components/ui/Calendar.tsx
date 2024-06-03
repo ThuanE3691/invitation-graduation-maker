@@ -21,7 +21,7 @@ const Calendar = () => {
 						className={clsx(
 							"relative font-garamond text-xl",
 							i === 7 &&
-								"after:rounded-full after:border-yellow-200 after:absolute after:bg-transparent after:border-[2px] after:w-8 after:h-8 after:-translate-x-[21px] after:-translate-y-0.5"
+								"after:rounded-full after:border-[#ecd7bd] after:absolute after:bg-transparent after:border-[2px] after:w-8 after:h-8 after:-translate-x-[21px] after:-translate-y-0.5"
 						)}
 					>
 						{i + 1}

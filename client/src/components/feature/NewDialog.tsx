@@ -26,10 +26,14 @@ const NewDialog = ({ inviter }: NewDialogProps) => {
 	// const navigate = useNavigate();
 
 	const handleCreateNewGuest = useMutation({
-		mutationFn: () => {
-			return axios.post("/guest", {
+		mutationFn: ({ name }: { name: string }) => {
+			if (!inviter) {
+				return Promise.reject("Inviter not found");
+			}
+
+			return axios.post("/guest/create", {
 				inviterId: inviter?.id,
-				guestName: name.value,
+				guestName: name,
 			});
 		},
 		onSuccess: () => {
@@ -63,7 +67,16 @@ const NewDialog = ({ inviter }: NewDialogProps) => {
 					</div>
 				</div>
 				<DialogFooter>
-					<Button type="submit" onClick={() => handleCreateNewGuest.mutate()}>
+					<Button
+						type="submit"
+						onClick={() => {
+							for (let i = 0; i < 20; i++) {
+								handleCreateNewGuest.mutate({
+									name: `Guest ${i}`,
+								});
+							}
+						}}
+					>
 						Create news
 					</Button>
 				</DialogFooter>

@@ -56,10 +56,11 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getUserById = getUserById;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name } = req.query;
+        const { name, email } = req.body;
         yield prismaClient_1.default.user.create({
             data: {
                 name,
+                email
             },
         });
         return res.status(200).json({
@@ -67,6 +68,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
+        console.log(error);
         res.json({
             success: false,
             message: "Internal Server",

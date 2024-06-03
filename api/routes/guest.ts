@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
 	createGuestOfUser,
 	getGuestById,
+	getImageById,
 	updateGuest,
 	updateImage,
 	updateImageInfo,
@@ -13,9 +14,10 @@ const upload = multer({ storage: storage });
 
 const guestRouter = Router();
 
-guestRouter.get("/:id", getGuestById);
-guestRouter.post("/", createGuestOfUser);
+guestRouter.get("/guest/:id", getGuestById);
+guestRouter.post("/create", createGuestOfUser);
 guestRouter.put("/update", updateGuest);
+guestRouter.get("/image/:id", getImageById);
 
 guestRouter.put("/image", upload.single("file"), updateImage);
 guestRouter.put("/imageInfo", updateImageInfo);

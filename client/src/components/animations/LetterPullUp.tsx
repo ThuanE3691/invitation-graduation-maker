@@ -5,6 +5,7 @@ type Props = {
 	listWords?: string[];
 	delay: number;
 	className?: string;
+	startAnimation: boolean;
 };
 
 type LetterProps = {
@@ -13,6 +14,7 @@ type LetterProps = {
 	className?: string;
 	position: number;
 	delay: number;
+	startAnimation: boolean;
 };
 
 const LetterAnimation = ({
@@ -20,6 +22,7 @@ const LetterAnimation = ({
 	className,
 	position,
 	delay,
+	startAnimation,
 }: LetterProps) => {
 	const pullupVariant = {
 		initial: { y: 100, opacity: 0 },
@@ -37,7 +40,7 @@ const LetterAnimation = ({
 			key={position}
 			variants={pullupVariant}
 			initial="initial"
-			animate="animate"
+			animate={startAnimation ? "animate" : "hidden"}
 			custom={position}
 			className={cn(
 				"text-center text-4xl font-bold tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]",
@@ -49,7 +52,12 @@ const LetterAnimation = ({
 	);
 };
 
-const LetterPullUp = ({ listWords, delay, className }: Props) => {
+const LetterPullUp = ({
+	listWords,
+	delay,
+	className,
+	startAnimation,
+}: Props) => {
 	let countWords = 0;
 
 	return (
@@ -69,6 +77,7 @@ const LetterPullUp = ({ listWords, delay, className }: Props) => {
 									position={countWords + j}
 									className={className}
 									delay={delay}
+									startAnimation={startAnimation}
 								/>
 							);
 						})}

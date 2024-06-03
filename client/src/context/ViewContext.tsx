@@ -111,7 +111,7 @@ const ViewContextProvider = ({ children }: { children: React.ReactNode }) => {
 		if (inviter && guestName) {
 			const guest = inviter?.guests.find((guest) => guest.name === guestName);
 			return await axios
-				.get(`/guest/${guest?.id}`)
+				.get(`/guest/guest/${guest?.id}`)
 				.then((res) => {
 					return res.data.data;
 				})

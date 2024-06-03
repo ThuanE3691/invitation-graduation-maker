@@ -2,6 +2,8 @@ import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
+	SheetOverlay,
+	SheetPortal,
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
@@ -21,6 +23,7 @@ import {
 	getBlobFromImageElement,
 	copyBlobToClipboard,
 } from "copy-image-clipboard";
+import { BiCopy } from "react-icons/bi";
 
 export enum ModeController {
 	ADMIN = "ADMIN",
@@ -66,74 +69,78 @@ const ViewController = ({ mode }: ViewControllerProps) => {
 
 	return (
 		<Sheet>
-			<SheetTrigger className="fixed z-50 py-4 pl-4">
+			<SheetTrigger className="fixed py-4 pl-4 z-[100]">
 				<IoSettingsOutline size={32} />
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Create new invitation page</SheetTitle>
-				</SheetHeader>
-				<Separator className="my-4" />
-				<div className="flex flex-col gap-y-4">
+			<SheetPortal>
+				<SheetContent>
 					<SheetHeader>
-						<span className="font-medium">Current Inviter</span>
-						<InviterSelect></InviterSelect>
+						<SheetTitle>Create new invitation page</SheetTitle>
 					</SheetHeader>
-					{mode === ModeController.INVITER && (
-						<>
-							<SheetHeader>
-								<span className="font-medium">List Guest</span>
-								<GuestSelect></GuestSelect>
-							</SheetHeader>
-							<div className="flex items-center gap-x-2">
-								<Separator className=" w-[45%]" />
-								<div className="font-medium font-montserrat">OR</div>
-								<Separator className=" w-[45%]" />
-							</div>
-							<NewDialog inviter={inviter.value}></NewDialog>
-						</>
-					)}
-					{mode === ModeController.GUEST && (
-						<>
-							<SheetHeader>
-								<span className="font-medium">Guest Name</span>
+					<Separator className="my-4" />
+					<div className="flex flex-col gap-y-4">
+						<SheetHeader>
+							<span className="font-medium">Current Inviter</span>
+							<InviterSelect></InviterSelect>
+						</SheetHeader>
+						{mode === ModeController.INVITER && (
+							<>
+								<SheetHeader>
+									<span className="font-medium">List Guest</span>
+									<GuestSelect></GuestSelect>
+								</SheetHeader>
 								<div className="flex items-center gap-x-2">
-									<Input
-										value={nameGuest?.value}
-										onChange={nameGuest?.onChange}
-									></Input>
-									<Button variant="outline" onClick={() => mutation.mutate()}>
-										Save
-									</Button>
+									<Separator className=" w-[45%]" />
+									<div className="font-medium font-montserrat">OR</div>
+									<Separator className=" w-[45%]" />
 								</div>
-							</SheetHeader>
-							<SheetHeader>
-								<span className="font-medium">First Image</span>
-								<ImageUpload image={images[0]}></ImageUpload>
-							</SheetHeader>
-							<SheetHeader>
-								<span className="font-medium">Second Image</span>
-								<ImageUpload image={images[1]}></ImageUpload>
-							</SheetHeader>
-							<SheetHeader>
-								<span className="font-medium">Third Image</span>
-								<ImageUpload image={images[2]}></ImageUpload>
-							</SheetHeader>
-							<SheetHeader>
-								<span className="font-medium">QR Code Generate</span>
-								<QRCodeCanvas
-									id="qr-code"
-									value={`https://graduation-uit.vercel.app/user/${inviter.value?.name}/${guest.value?.name}`}
-								></QRCodeCanvas>
+								<NewDialog inviter={inviter.value}></NewDialog>
+							</>
+						)}
+						{mode === ModeController.GUEST && (
+							<>
+								<SheetHeader>
+									<span className="font-medium">Guest Name</span>
+									<div className="flex items-center gap-x-2">
+										<Input
+											value={nameGuest?.value}
+											onChange={nameGuest?.onChange}
+										></Input>
+										<Button variant="outline" onClick={() => mutation.mutate()}>
+											Save
+										</Button>
+									</div>
+								</SheetHeader>
+								<SheetHeader>
+									<span className="font-medium">First Image</span>
+									<ImageUpload image={images[0]}></ImageUpload>
+								</SheetHeader>
+								<SheetHeader>
+									<span className="font-medium">Second Image</span>
+									<ImageUpload image={images[1]}></ImageUpload>
+								</SheetHeader>
+								<SheetHeader>
+									<span className="font-medium">Third Image</span>
+									<ImageUpload image={images[2]}></ImageUpload>
+								</SheetHeader>
+								<SheetHeader>
+									<span className="font-medium">QR Code Generate</span>
+									<div className="flex items-center w-full gap-x-4">
+										<QRCodeCanvas
+											id="qr-code"
+											value={`https://graduation-uit.vercel.app/user/${inviter.value?.name}/${guest.value?.name}`}
+										></QRCodeCanvas>
 
-								<Button variant="outline" onClick={onClickCopyQrCode}>
-									Copy QR Code
-								</Button>
-							</SheetHeader>
-						</>
-					)}
-				</div>
-			</SheetContent>
+										<Button variant="outline" onClick={onClickCopyQrCode}>
+											<BiCopy size="24"></BiCopy>
+										</Button>
+									</div>
+								</SheetHeader>
+							</>
+						)}
+					</div>
+				</SheetContent>
+			</SheetPortal>
 		</Sheet>
 	);
 };
