@@ -40,7 +40,7 @@ const NewDialog = ({ inviter }: NewDialogProps) => {
 			// navigate(`/user/${inviter?.name}/${name.value}`);
 		},
 	});
-
+	
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -70,10 +70,8 @@ const NewDialog = ({ inviter }: NewDialogProps) => {
 					<Button
 						type="submit"
 						onClick={() => {
-							for (let i = 0; i < 20; i++) {
-								handleCreateNewGuest.mutate({
-									name: `Guest ${i}`,
-								});
+							if (name.value) {
+								handleCreateNewGuest.mutate({ name: name.value });
 							}
 						}}
 					>

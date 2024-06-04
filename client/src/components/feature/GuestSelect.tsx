@@ -27,7 +27,7 @@ const GuestSelect = () => {
 			<SelectContent>
 				<SelectGroup>
 					<SelectLabel>List guest</SelectLabel>
-					{inviter?.value?.guests?.map((guest) => {
+					{inviter?.value?.guests?.sort((a, b) => a.name.localeCompare(b.name)).map((guest) => {
 						return (
 							<SelectItem key={guest.id} value={guest.name}>
 								{guest.name}

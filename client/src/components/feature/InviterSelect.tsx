@@ -28,8 +28,14 @@ const InviterSelect = () => {
             <SelectContent>
                 <SelectGroup>
                     <SelectLabel>Inviter</SelectLabel>
-                    {users?.value?.map((user) => {
-                        return <SelectItem key={user.id} value={user.name}>{user.name}</SelectItem>;
+                    {users?.value
+                    ?.sort((a, b) => a.name.localeCompare(b.name))
+                    .map((user) => {
+                        return (
+                            <SelectItem key={user.id} value={user.name}>
+                                {user.name}
+                            </SelectItem>
+                        );
                     })}
                 </SelectGroup>
             </SelectContent>
