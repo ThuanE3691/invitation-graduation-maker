@@ -15,6 +15,7 @@ export const getAllUser = async (_: Request, res: Response) => {
 	}
 };
 
+
 export const getUserById = async (req: Request, res: Response) => {
 	try {
 		const user = await prisma.user.findFirst({
